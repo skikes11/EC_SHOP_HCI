@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 try {
-  const connectionString = "mongodb+srv://Ecommerce:<password>@cluster0.jwahiqc.mongodb.net/?retryWrites=true&w=majority"
+  const connectionString = process.env.DATABASE
   mongoose.connect(connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

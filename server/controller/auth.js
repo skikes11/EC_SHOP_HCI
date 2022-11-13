@@ -2,19 +2,8 @@ const { toTitleCase, validateEmail } = require("../config/function");
 const bcrypt = require("bcryptjs");
 const userModel = require("../models/users");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/keys");
 
 class Auth {
-  async isAdmin(req, res) {
-    let { loggedInUserId } = req.body;
-    try {
-      let loggedInUserRole = await userModel.findById(loggedInUserId);
-      res.json({ role: loggedInUserRole.userRole });
-    } catch {
-      res.status(404);
-    }
-  }
-
   async allUser(req, res) {
     try {
       let allUser = await userModel.find({});
@@ -119,9 +108,9 @@ class Auth {
         if (login) {
           const token = jwt.sign(
             { _id: data._id, role: data.userRole },
-            JWT_SECRET
+            process.env.JWT_SECRET
           );
-          const encode = jwt.verify(token, JWT_SECRET);
+          const encode = jwt.verify(token, process.env.JWT_SECRET);
           return res.json({
             token: token,
             user: encode,

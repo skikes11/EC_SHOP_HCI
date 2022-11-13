@@ -1,12 +1,11 @@
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/keys");
 const userModel = require("../models/users");
 
 exports.loginCheck = (req, res, next) => {
   try {
     let token = req.headers.token;
     token = token.replace("Bearer ", "");
-    decode = jwt.verify(token, JWT_SECRET);
+    decode = jwt.verify(token, process.env.JWT_SECRET);
     req.userDetails = decode;
     next();
   } catch (err) {
@@ -16,27 +15,17 @@ exports.loginCheck = (req, res, next) => {
   }
 };
 
-exports.isAuth = (req, res, next) => {
-  let { loggedInUserId } = req.body;
-  if (
-    !loggedInUserId ||
-    !req.userDetails._id ||
-    loggedInUserId != req.userDetails._id
-  ) {
-    res.status(403).json({ error: "You are not authenticate" });
-  }
-  next();
-};
-
-exports.isAdmin = async (req, res, next) => {
-  try {
-    let reqUser = await userModel.findById(req.body.loggedInUserId);
-    // If user role 0 that's mean not admin it's customer
-    if (reqUser.userRole === 0) {
-      res.status(403).json({ error: "Access denied" });
+// Grant access to specific roles
+exports.authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorResponse(
+          `User role ${req.user.role} is not authorized to access this route`,
+          403
+        )
+      )
     }
-    next();
-  } catch {
-    res.status(404);
+    next()
   }
-};
+}
