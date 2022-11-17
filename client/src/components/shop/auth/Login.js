@@ -1,11 +1,11 @@
 import React, { Fragment, useState, useContext } from "react";
 import { loginReq } from "./fetchApi";
 import { LayoutContext } from "../index";
+import axios from "axios";
 
 const Login = (props) => {
-  const { data: layoutData, dispatch: layoutDispatch } = useContext(
-    LayoutContext
-  );
+  const { data: layoutData, dispatch: layoutDispatch } =
+    useContext(LayoutContext);
 
   const [data, setData] = useState({
     email: "",
@@ -23,6 +23,7 @@ const Login = (props) => {
         email: data.email,
         password: data.password,
       });
+      console.log("data");
       if (responseData.error) {
         setData({
           ...data,
@@ -33,6 +34,8 @@ const Login = (props) => {
       } else if (responseData.token) {
         setData({ email: "", password: "", loading: false, error: false });
         localStorage.setItem("jwt", JSON.stringify(responseData));
+        console.log("token", `Bearer ${responseData.token}`);
+        axios.defaults.headers.common["token"] = `Bearer ${responseData.token}`;
         window.location.href = "/";
       }
     } catch (error) {

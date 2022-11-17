@@ -1,9 +1,21 @@
 import axios from "axios";
 const apiURL = process.env.REACT_APP_API_URL;
 
+const BearerToken = () =>
+  localStorage.getItem("jwt")
+    ? JSON.parse(localStorage.getItem("jwt")).token
+    : false;
+const Headers = () => {
+  return {
+    headers: {
+      token: `Bearer ${BearerToken()}`,
+    },
+  };
+};
+
 export const getAllProduct = async () => {
   try {
-    let res = await axios.get(`${apiURL}/api/product/all-product`);
+    let res = await axios.get(`${apiURL}/api/product/all-product`, Headers());
     return res.data;
   } catch (error) {
     console.log(error);
@@ -44,7 +56,11 @@ export const createProduct = async ({
   formData.append("pOffer", pOffer);
 
   try {
-    let res = await axios.post(`${apiURL}/api/product/add-product`, formData);
+    let res = await axios.post(
+      `${apiURL}/api/product/add-product`,
+      formData,
+      Headers()
+    );
     return res.data;
   } catch (error) {
     console.log(error);
@@ -72,7 +88,11 @@ export const editProduct = async (product) => {
   formData.append("pImages", product.pImages);
 
   try {
-    let res = await axios.post(`${apiURL}/api/product/edit-product`, formData);
+    let res = await axios.post(
+      `${apiURL}/api/product/edit-product`,
+      formData,
+      Headers()
+    );
     return res.data;
   } catch (error) {
     console.log(error);
@@ -81,7 +101,11 @@ export const editProduct = async (product) => {
 
 export const deleteProduct = async (pId) => {
   try {
-    let res = await axios.post(`${apiURL}/api/product/delete-product`, { pId });
+    let res = await axios.post(
+      `${apiURL}/api/product/delete-product`,
+      { pId },
+      Headers()
+    );
     return res.data;
   } catch (error) {
     console.log(error);
@@ -90,9 +114,13 @@ export const deleteProduct = async (pId) => {
 
 export const productByCategory = async (catId) => {
   try {
-    let res = await axios.post(`${apiURL}/api/product/product-by-category`, {
-      catId,
-    });
+    let res = await axios.post(
+      `${apiURL}/api/product/product-by-category`,
+      {
+        catId,
+      },
+      Headers()
+    );
     return res.data;
   } catch (error) {
     console.log(error);
@@ -101,9 +129,13 @@ export const productByCategory = async (catId) => {
 
 export const productByPrice = async (price) => {
   try {
-    let res = await axios.post(`${apiURL}/api/product/product-by-price`, {
-      price,
-    });
+    let res = await axios.post(
+      `${apiURL}/api/product/product-by-price`,
+      {
+        price,
+      },
+      Headers()
+    );
     return res.data;
   } catch (error) {
     console.log(error);
