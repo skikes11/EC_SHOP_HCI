@@ -34,8 +34,6 @@ const Login = (props) => {
       } else if (responseData.token) {
         setData({ email: "", password: "", loading: false, error: false });
         localStorage.setItem("jwt", JSON.stringify(responseData));
-        console.log("token", `Bearer ${responseData.token}`);
-        axios.defaults.headers.common["token"] = `Bearer ${responseData.token}`;
         window.location.href = "/";
       }
     } catch (error) {
