@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useContext } from "react";
 import { loginReq } from "./fetchApi";
 import { LayoutContext } from "../index";
-import axios from "axios";
 
 const Login = (props) => {
   const { data: layoutData, dispatch: layoutDispatch } =

@@ -39,6 +39,7 @@ const CreateAllFolder = require("./config/uploadFolderCreateScript");
 /* Create All Uploads Folder if not exists | For Uploading Images */
 CreateAllFolder();
 
+console.log("database: ", process.env.DATABASE)
 // Database Connection
 mongoose
   .connect(process.env.DATABASE, {
@@ -51,7 +52,8 @@ mongoose
       "==============Mongodb Database Connected Successfully=============="
     )
   )
-  .catch((err) => console.log("Database Not Connected !!!"));
+  .catch((err) => console.log("db err: ", err));
+
 
 // Middleware
 app.use(morgan("dev"));

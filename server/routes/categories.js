@@ -17,6 +17,8 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/all-category", categoryController.getAllCategory);
+
+//ADMIN PERMISSIONS
 router.post(
   "/add-category",
   loginCheck,
